@@ -2,7 +2,6 @@ const usuarioRepository = require("./usuario_repository_bd");
 const request = require('supertest');
 const { app } = require('../app.js');
 
-
 describe('Rotas de usuario', () => {
 
     test('Quando inserir o usuario, deve retornar e conter na lista o usuario inserido', async () => {
