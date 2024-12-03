@@ -1,53 +1,53 @@
 const usuarioService = require('../service/usuario_service');
 
 // Funções do Controller
-const listar = (req, res) => {
-  res.json(usuarioService.listar());
-};
+async function listar(req, res) {
+  res.json(await usuarioService.listar());
+}
 
-const buscarPorId = (req, res) => {
+async function buscarPorId(req, res) {
   const id = +req.params.id;
   try {
-    res.json(usuarioService.buscarPorId(id));
+    res.json(await usuarioService.buscarPorId(id));
   } catch (err) {
     res.status(err.id).json(err);
   }
-};
+}
 
-const inserir = (req, res) => {
+async function inserir(req, res) {
   const usuario = req.body;
   try {
-    const usuarioInserido = usuarioService.inserir(usuario);
+    const usuarioInserido = await usuarioService.inserir(usuario);
     res.status(201).json(usuarioInserido);
   } catch (err) {
     res.status(err.id).json(err);
   }
-};
+}
 
-const atualizar = (req, res) => {
+async function atualizar(req, res) {
   const id = +req.params.id;
   const usuario = req.body;
   try {
-    const usuarioAtualizado = usuarioService.atualizar(id, usuario);
+    const usuarioAtualizado = await usuarioService.atualizar(id, usuario);
     res.json(usuarioAtualizado);
   } catch (err) {
     res.status(err.id).json(err);
   }
-};
+}
 
-const deletar = (req, res) => {
+async function deletar(req, res) {
   const id = +req.params.id;
   try {
-    res.json(usuarioService.deletar(id));
+    res.json(await usuarioService.deletar(id));
   } catch (err) {
     res.status(err.id).json(err);
   }
-};
+}
 
 module.exports = {
   listar,
   buscarPorId,
   inserir,
   atualizar,
-  deletar
+  deletar,
 };

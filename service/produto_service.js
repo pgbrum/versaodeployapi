@@ -1,21 +1,22 @@
-const produtoRepository = require('../repository/produto_repository')
+const produtoRepositoryBD = require('../repository/produto_repository_bd')
 
-function listar() {
-    return produtoRepository.listar();
+async function listar() {
+    return await produtoRepositoryBD.listar();
 }
 
-function inserir(produto) {
-    if(produto && produto.nome 
-        && produto.categoria && produto.preco){
-            return produtoRepository.inserir(produto);
+async function inserir(produto) {
+    if (!produto || !produto.nome || !produto.categoria || !produto.preco) {
+        throw { id: 400, msg: "Faltando dados do produto"}  
     }
-    else {
-        throw { id: 400, msg: "Produto sem dados corretos"}
+    try{
+        return await produtoRepositoryBD.inserir(produto);
+    }catch(err){
+        throw { id: 400, msg: "Produto sem dados corretos"}        
     }
 }
 
-function buscarPorId(id) {
-    let produto = produtoRepository.buscarPorId(id);
+async function buscarPorId(id) {
+    let produto = await produtoRepositoryBD.buscarPorId(id);
     if(produto) {
         return produto;
     }
@@ -24,9 +25,9 @@ function buscarPorId(id) {
     }
 }
 
-function atualizar(id, produto) {
+async function atualizar(id, produto) {
     if(produto && produto.nome && produto.categoria && produto.preco) {
-        const produtoAtualizado = produtoRepository.atualizar(id, produto);
+        const produtoAtualizado = await produtoRepositoryBD.atualizar(id, produto);
         if(produtoAtualizado) {
             return produtoAtualizado;
         }        
@@ -39,8 +40,8 @@ function atualizar(id, produto) {
     }
 }
 
-function deletar(id) {
-    let produto = produtoRepository.deletar(id);
+async function deletar(id) {
+    let produto = await produtoRepositoryBD.deletar(id);
     if(produto) {
         return produto;
     }

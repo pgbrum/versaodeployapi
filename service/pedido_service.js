@@ -1,6 +1,6 @@
-const pedidoRepository = require('../repository/pedido_repository')
-const usuarioRepository = require('../repository/usuario_repository')
-const produtoRepository = require('../repository/produto_repository')
+const pedidoRepositoryBD = require('../repository/pedido_repository_bd');
+const usuarioRepositoryBD = require('../repository/usuario_repository_bd');
+const produtoRepositoryBD = require('../repository/produto_repository_bd');
 
 function obterDataAtual() {
   const hoje = new Date();
@@ -13,58 +13,53 @@ function obterDataAtual() {
 
 const dataAtual = obterDataAtual();
 
-function listar() {
-  return pedidoRepository.listar();
+async function listar() {
+  return await pedidoRepositoryBD.listar();
 }
 
-function inserir(pedido) {
+async function inserir(pedido) {
   if (pedido && pedido.idUsuario && pedido.idProduto) {
-    const usuarioExiste = usuarioRepository.buscarPorId(pedido.idUsuario);
-    const produtoExiste = produtoRepository.buscarPorId(pedido.idProduto);
+    const usuarioExiste = await usuarioRepositoryBD.buscarPorId(pedido.idUsuario);
+    const produtoExiste = await produtoRepositoryBD.buscarPorId(pedido.idProduto);
 
     if (usuarioExiste && produtoExiste) {
       pedido.nomeProduto = produtoExiste.nome;
       pedido.nomeUsuario = usuarioExiste.nome;
       pedido.dataPedido = dataAtual;
+      return await pedidoRepositoryBD.inserir(pedido);
     } else {
       throw { id: 404, msg: "Usuário ou produto com dados incorretos" };
     }
   } else {
     throw { id: 400, msg: "Pedido sem dados corretos" };
   }
-
-  return pedidoRepository.inserir(pedido);
 }
 
-function buscarPorId(id) {
-  const pedido = pedidoRepository.buscarPorId(id);
+async function buscarPorId(id) {
+  const pedido = await pedidoRepositoryBD.buscarPorId(id);
   if (!pedido) {
-    throw { id: 404, msg: "Pedido não encontrado!" }
+    throw { id: 404, msg: "Pedido não encontrado!" };
   }
   return pedido;
 }
 
-function atualizar(id, pedido) {
-  // Verifica se os dados essenciais foram fornecidos
+async function atualizar(id, pedido) {
   if (!pedido || !pedido.idUsuario || !pedido.idProduto) {
     throw { id: 400, msg: "Pedido com dados inválidos." };
   }
 
-  // Verifica se o usuário e produto existem
-  const usuarioExiste = usuarioRepository.buscarPorId(pedido.idUsuario);
-  const produtoExiste = produtoRepository.buscarPorId(pedido.idProduto);
+  const usuarioExiste = await usuarioRepositoryBD.buscarPorId(pedido.idUsuario);
+  const produtoExiste = await produtoRepositoryBD.buscarPorId(pedido.idProduto);
 
   if (!usuarioExiste || !produtoExiste) {
     throw { id: 404, msg: "Usuário ou produto não encontrado!" };
   }
 
-  // Busca o pedido atual no repositório
-  const pedidoAtual = pedidoRepository.buscarPorId(id);
+  const pedidoAtual = await pedidoRepositoryBD.buscarPorId(id);
   if (!pedidoAtual) {
     throw { id: 404, msg: "Pedido não encontrado!" };
   }
 
-  // Atualiza os dados do pedido
   const pedidoAtualizado = {
     ...pedidoAtual,
     idUsuario: pedido.idUsuario,
@@ -73,12 +68,11 @@ function atualizar(id, pedido) {
     nomeProduto: produtoExiste.nome,
   };
 
-  // Atualiza o pedido no repositório
-  return pedidoRepository.atualizar(id, pedidoAtualizado);
+  return await pedidoRepositoryBD.atualizar(id, pedidoAtualizado);
 }
 
-function deletar(id) {
-  const pedido = pedidoRepository.deletar(id);
+async function deletar(id) {
+  const pedido = await pedidoRepositoryBD.deletar(id);
   if (!pedido) {
     throw { id: 404, msg: "Pedido não encontrado!" };
   }
@@ -90,5 +84,5 @@ module.exports = {
   inserir,
   buscarPorId,
   atualizar,
-  deletar
+  deletar,
 };

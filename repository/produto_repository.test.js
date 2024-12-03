@@ -1,4 +1,4 @@
-const produtoRepository = require("./produto_repository.js");
+const produtoRepository = require("./produto_repository_bd");
 const request = require('supertest');
 const { app } = require('../app');
 

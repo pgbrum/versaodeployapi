@@ -1,7 +1,7 @@
 const request = require('supertest');
 const { app } = require('../app');
-const { inserir: inserirUsuario } = require('../repository/usuario_repository');
-const { inserir: inserirProduto } = require('../repository/produto_repository');
+const { inserir: inserirUsuario } = require('../repository/usuario_repository_bd');
+const { inserir: inserirProduto } = require('../repository/produto_repository_bd');
 
 let usuario;
 let produto;

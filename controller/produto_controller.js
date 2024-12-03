@@ -1,49 +1,48 @@
 const produtoService = require('../service/produto_service');
 
 // Funções do Controller
-const listar = (req, res) => {
-  res.json(produtoService.listar());
-};
+async function listar(req, res) {
+  res.json(await produtoService.listar());
+}
 
-const buscarPorId = (req, res) => {
-  const id = +req.params.id;
-  try {
-    res.json(produtoService.buscarPorId(id));
-  } catch (err) {
-    res.status(err.id).json(err);
-  }
-};
-
-const inserir = (req, res) => {
+async function inserir (req, res){
   const produto = req.body;
   try {
-    const produtoInserido = produtoService.inserir(produto);
+    const produtoInserido = await produtoService.inserir(produto);
     res.status(201).json(produtoInserido);
   } catch (err) {
     res.status(err.id).json(err);
   }
-};
+}
 
-const atualizar = (req, res) => {
+async function buscarPorId (req, res){
+  const id = +req.params.id;
+  try {
+    res.json(await produtoService.buscarPorId(id));
+  } catch (err) {
+    res.status(err.id).json(err);
+  }
+}
+
+async function atualizar(req, res){
   const id = +req.params.id;
   const produto = req.body;
   try {
-    const produtoAtualizado = produtoService.atualizar(id, produto);
+    const produtoAtualizado = await produtoService.atualizar(id, produto);
     res.json(produtoAtualizado);
   } catch (err) {
     res.status(err.id).json(err);
   }
-};
+}
 
-const deletar = (req, res) => {
+async function deletar(req, res){
   const id = +req.params.id;
   try {
-    res.json(produtoService.deletar(id));
-    res.status(204);
+    res.json(await produtoService.deletar(id));
   } catch (err) {
     res.status(err.id).json(err);
   }
-};
+}
 
 module.exports = {
   listar,
@@ -51,4 +50,4 @@ module.exports = {
   inserir,
   atualizar,
   deletar
-};
+}
