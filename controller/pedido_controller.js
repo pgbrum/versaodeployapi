@@ -1,6 +1,5 @@
 const pedidoService = require('../service/pedido_service');
 
-// Funções do Controller
 async function listar(req, res) {
   try {
     const pedidos = await pedidoService.listar();

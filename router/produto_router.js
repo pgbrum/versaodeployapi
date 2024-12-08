@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router();
 const produtoController = require('../controller/produto_controller')
 
-// Rotas para Produtos
 router.get('/', produtoController.listar);
 router.get('/:id', produtoController.buscarPorId);
 router.post('/', produtoController.inserir);

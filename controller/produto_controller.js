@@ -1,6 +1,5 @@
 const produtoService = require('../service/produto_service');
 
-// Funções do Controller
 async function listar(req, res) {
   res.json(await produtoService.listar());
 }

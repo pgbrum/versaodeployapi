@@ -6,12 +6,12 @@ async function listar() {
 
 async function inserir(produto) {
     if (!produto || !produto.nome || !produto.categoria || !produto.preco) {
-        throw { id: 400, msg: "Faltando dados do produto"}  
+        throw { id: 400, msg: "Faltando dados do produto"}
     }
     try{
         return await produtoRepositoryBD.inserir(produto);
     }catch(err){
-        throw { id: 400, msg: "Produto sem dados corretos"}        
+        throw { id: 400, msg: "Produto sem dados corretos"}
     }
 }
 

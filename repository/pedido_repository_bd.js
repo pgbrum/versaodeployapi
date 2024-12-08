@@ -1,6 +1,5 @@
 const { Client } = require('pg');
 
-// Configuração do banco de dados
 const config = {
     user: 'api_bd',
     password: '123456',
@@ -8,7 +7,7 @@ const config = {
     port: 5432,
     database: 'API',
 };
-// Listar todos os pedidos
+
 async function listar() {
     const cliente = new Client(config);
     await cliente.connect();
@@ -18,7 +17,6 @@ async function listar() {
     return res.rows;
 }
 
-// Inserir um novo pedido
 async function inserir(pedido) {
     if (
         !pedido ||
@@ -48,7 +46,6 @@ async function inserir(pedido) {
     return res.rows[0];
 }
 
-// Buscar pedido por ID
 async function buscarPorId(id) {
     const cliente = new Client(config);
     await cliente.connect();
@@ -59,7 +56,6 @@ async function buscarPorId(id) {
     return res.rows[0];
 }
 
-// Atualizar um pedido
 async function atualizar(id, pedidoAtualizado) {
     if (
         !pedidoAtualizado ||
@@ -89,7 +85,6 @@ async function atualizar(id, pedidoAtualizado) {
     return res.rows[0];
 }
 
-// Deletar um pedido por ID
 async function deletar(id) {
     const cliente = new Client(config);
     await cliente.connect();
@@ -100,7 +95,6 @@ async function deletar(id) {
     return res.rows[0];
 }
 
-// Exportação das funções
 module.exports = {
     listar,
     inserir,

@@ -1,6 +1,5 @@
 const { Client } = require('pg');
 
-// Configuração do banco de dados
 const config = {
     user: 'api_bd',
     password: '123456',
@@ -9,7 +8,6 @@ const config = {
     database: 'API',
 };
 
-// Listar todos os usuários
 async function listar() {
     const cliente = new Client(config);
     await cliente.connect();
@@ -19,7 +17,6 @@ async function listar() {
     return res.rows;
 }
 
-// Inserir um novo usuário
 async function inserir(usuario) {
     if (!usuario || !usuario.nome || !usuario.cpf || !usuario.email) {
         return undefined;
@@ -36,7 +33,6 @@ async function inserir(usuario) {
     return res.rows[0];
 }
 
-// Buscar usuário por ID
 async function buscarPorId(id) {
     const cliente = new Client(config);
     await cliente.connect();
@@ -47,7 +43,6 @@ async function buscarPorId(id) {
     return res.rows[0];
 }
 
-// Atualizar um usuário
 async function atualizar(id, usuario) {
     if (!usuario || !usuario.nome || !usuario.cpf || !usuario.email) {
         return undefined;
@@ -65,7 +60,6 @@ async function atualizar(id, usuario) {
     return res.rows[0];
 }
 
-// Deletar um usuário por ID
 async function deletar(id) {
     const cliente = new Client(config);
     await cliente.connect();
@@ -76,7 +70,6 @@ async function deletar(id) {
     return res.rows[0];
 }
 
-// Exportação das funções
 module.exports = {
     listar,
     inserir,

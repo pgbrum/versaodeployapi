@@ -20,9 +20,6 @@ async function listar() {
 async function inserir(produto) {
     const cliente = new Client(config);
     await cliente.connect();
-    // const sql = 'INSERT INTO produtos(nome, categoria, preco) VALUES ($1, $2, $3) RETURNING *';
-    // const valores = [produto.nome, produto.categoria, produto.preco];
-    // const res = await cliente.query(sql, valores);
     const res = await cliente.query('INSERT INTO produtos(nome, categoria, preco) VALUES ($1, $2, $3) RETURNING *',[produto.nome, produto.categoria, produto.preco])
     await cliente.end();
     return res.rows[0];
@@ -71,7 +68,6 @@ async function deletarTodos() {
     await cliente.end();
 }
 
-// Exportação das funções
 module.exports = {
     listar,
     inserir,

@@ -35,7 +35,7 @@ describe('Testes de Pedido', () => {
         expect(response.body.idUsuario).toBe(usuario.id);
         expect(response.body.idProduto).toBe(produto.id);
 
-        pedido = response.body; // Salva o pedido para os próximos testes
+        pedido = response.body;
     });
 
     test('Deve listar todos os pedidos', async () => {
@@ -60,7 +60,7 @@ describe('Testes de Pedido', () => {
             nomeUsuario: usuario.nome,
             idProduto: produto.id,
             nomeProduto: produto.nome,
-            dataPedido: new Date().toLocaleDateString('pt-BR') // Usa o formato "dd/mm/yyyy" no Brasil
+            dataPedido: new Date().toLocaleDateString('pt-BR')
         };
     
         const response = await request(app)
@@ -69,7 +69,6 @@ describe('Testes de Pedido', () => {
     
         expect(response.status).toBe(200);
         
-        // Compara apenas as datas (sem o horário)
         expect(response.body.dataPedido).toBe(pedidoAtualizado.dataPedido);
     });
     
@@ -81,6 +80,6 @@ describe('Testes de Pedido', () => {
         expect(response.status).toBe(200);
         expect(response.body.id).toBe(pedido.id);
 
-        pedido = null; // Reseta o pedido para garantir que não tentamos deletar duas vezes
+        pedido = null;
     });
 });

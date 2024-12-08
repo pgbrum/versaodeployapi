@@ -2,7 +2,6 @@ const produtoRepository = require("./produto_repository_bd");
 const request = require('supertest');
 const { app } = require('../app');
 
-// Cenário de sucesso
 describe('Rota de produto', () => {
     
    test('Quando inserir o produto arroz, deve retornar e conter na lista o produto com id=1', async () => {
@@ -12,7 +11,7 @@ describe('Rota de produto', () => {
            categoria: "alimento",
            preco: 4.00
        };
-       
+
        const response = await request(app)
            .post('/produtos')
            .send(produtoInseridoEsperado)
@@ -22,7 +21,6 @@ describe('Rota de produto', () => {
        expect(produtos).toContainEqual(produtoInseridoEsperado);
    });
 
-   // Cenário de exceção
    test('Quando inserir o produto sem categoria, não deve retornar e não insere na lista', async () => {
        const produtoInseridoErrado = {
            id: 2,
@@ -57,7 +55,7 @@ describe('Rota de produto', () => {
            })
            .expect(201);
 
-       const produtoId = 1; // ID do produto inserido
+       const produtoId = 1;
 
        await request(app)
            .delete(`/produtos/${produtoId}`)
@@ -90,7 +88,6 @@ describe('Rota de produto', () => {
            .send(produtoAtualizado)
            .expect(200);
 
-       // Verificando se o produto foi atualizado no repositório
        const produtoAtual = await produtoRepository.listar();
        expect(produtoAtual).toContainEqual({
            id: 2,
