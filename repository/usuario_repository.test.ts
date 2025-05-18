@@ -1,11 +1,19 @@
-const usuarioRepository = require("./usuario_repository_bd");
-const request = require('supertest');
-const { app } = require('../app.js');
+import request from 'supertest';
+import { app } from '../app';
+import { usuarioRepository } from './usuario_repository_bd';
+
+// Definindo a interface para o tipo de usuário
+interface Usuario {
+    id?: number;
+    nome: string;
+    cpf: string;
+    email: string;
+}
 
 describe('Rotas de usuario', () => {
 
     test('Quando inserir o usuario, deve retornar e conter na lista o usuario inserido', async () => {
-        const usuarioInseridoEsperado = {
+        const usuarioInseridoEsperado: Usuario = {
             nome: "Alfi",
             cpf: "123",
             email: "alfi@email"
@@ -17,16 +25,17 @@ describe('Rotas de usuario', () => {
             .expect(201);
 
         const usuarios = await usuarioRepository.listar();
-        const usuarioCriado = usuarios.find(user => user.cpf === "123" && user.email === "alfi@email");
+        const usuarioCriado = usuarios.find((user: Usuario) => user.cpf === "123" && user.email === "alfi@email");
 
         expect(usuarioCriado).toBeDefined();
-        expect(usuarioCriado.nome).toBe(usuarioInseridoEsperado.nome);
+        expect(usuarioCriado?.nome).toBe(usuarioInseridoEsperado.nome);
     });
 
     test('Quando inserir o usuario sem email, não deve retornar e não insere na lista', async () => {
-        const usuarioInseridoErrado = {
+        const usuarioInseridoErrado: Usuario = {
             nome: "jonas",
-            cpf: "456"
+            cpf: "456",
+            email: ""
         };
 
         const response = await request(app)
@@ -35,7 +44,7 @@ describe('Rotas de usuario', () => {
             .expect(400);
 
         const usuarios = await usuarioRepository.listar();
-        const usuarioExistente = usuarios.find(user => user.cpf === "456");
+        const usuarioExistente = usuarios.find((user: Usuario) => user.cpf === "456");
         expect(usuarioExistente).toBeUndefined();
     });
 
@@ -63,7 +72,7 @@ describe('Rotas de usuario', () => {
             .expect(200);
 
         const usuarios = await usuarioRepository.listar();
-        const usuarioDeletado = usuarios.find(user => user.id === usuarioId);
+        const usuarioDeletado = usuarios.find((user: Usuario) => user.id === usuarioId);
         expect(usuarioDeletado).toBeUndefined();
     });
 
@@ -106,7 +115,7 @@ describe('Rotas de usuario', () => {
 
         const usuarioId = usuarioInserido.body.id;
 
-        const usuarioAtualizado = {
+        const usuarioAtualizado: Usuario = {
             nome: "Paulo",
             cpf: "789",
             email: "paulo@email"
@@ -123,7 +132,7 @@ describe('Rotas de usuario', () => {
     });
 
     test('Quando atualizar um usuario com id inexistente, deve retornar 404', async () => {
-        const usuarioAtualizado = {
+        const usuarioAtualizado: Usuario = {
             nome: "Carlos",
             cpf: "111",
             email: "vou@gmail"

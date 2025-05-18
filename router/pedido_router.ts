@@ -1,6 +1,7 @@
-const express = require('express')
+import express from 'express';
+import pedidoController from '../controller/pedido_controller';
+
 const router = express.Router();
-const pedidoController = require('../controller/pedido_controller')
 
 router.get('/', pedidoController.listar);
 router.get('/:id', pedidoController.buscarPorId);
@@ -8,4 +9,4 @@ router.post('/', pedidoController.inserir);
 router.put('/:id', pedidoController.atualizar);
 router.delete('/:id', pedidoController.deletar);
 
-module.exports = router
+export default router;

@@ -1,8 +1,17 @@
-const pedidoRepositoryBD = require('../repository/pedido_repository_bd');
-const usuarioRepositoryBD = require('../repository/usuario_repository_bd');
-const produtoRepositoryBD = require('../repository/produto_repository_bd');
+import pedidoRepositoryBD from '../repository/pedido_repository_bd';
+import usuarioRepositoryBD from '../repository/usuario_repository_bd';
+import produtoRepositoryBD from '../repository/produto_repository_bd';
 
-function obterDataAtual() {
+interface Pedido {
+  id?: number;
+  idUsuario: number;
+  idProduto: number;
+  nomeUsuario?: string;
+  nomeProduto?: string;
+  dataPedido?: string;
+}
+
+function obterDataAtual(): string {
   const hoje = new Date();
   const dia = String(hoje.getDate()).padStart(2, '0');
   const mes = String(hoje.getMonth() + 1).padStart(2, '0');
@@ -17,7 +26,7 @@ async function listar() {
   return await pedidoRepositoryBD.listar();
 }
 
-async function inserir(pedido) {
+async function inserir(pedido: Pedido) {
   if (pedido && pedido.idUsuario && pedido.idProduto) {
     const usuarioExiste = await usuarioRepositoryBD.buscarPorId(pedido.idUsuario);
     const produtoExiste = await produtoRepositoryBD.buscarPorId(pedido.idProduto);
@@ -35,7 +44,7 @@ async function inserir(pedido) {
   }
 }
 
-async function buscarPorId(id) {
+async function buscarPorId(id: number) {
   const pedido = await pedidoRepositoryBD.buscarPorId(id);
   if (!pedido) {
     throw { id: 404, msg: "Pedido não encontrado!" };
@@ -43,7 +52,7 @@ async function buscarPorId(id) {
   return pedido;
 }
 
-async function atualizar(id, pedido) {
+async function atualizar(id: number, pedido: Pedido) {
   if (!pedido || !pedido.idUsuario || !pedido.idProduto) {
     throw { id: 400, msg: "Pedido com dados inválidos." };
   }
@@ -60,7 +69,7 @@ async function atualizar(id, pedido) {
     throw { id: 404, msg: "Pedido não encontrado!" };
   }
 
-  const pedidoAtualizado = {
+  const pedidoAtualizado: Pedido = {
     ...pedidoAtual,
     idUsuario: pedido.idUsuario,
     idProduto: pedido.idProduto,
@@ -71,7 +80,7 @@ async function atualizar(id, pedido) {
   return await pedidoRepositoryBD.atualizar(id, pedidoAtualizado);
 }
 
-async function deletar(id) {
+async function deletar(id: number) {
   const pedido = await pedidoRepositoryBD.deletar(id);
   if (!pedido) {
     throw { id: 404, msg: "Pedido não encontrado!" };
@@ -79,7 +88,7 @@ async function deletar(id) {
   return pedido;
 }
 
-module.exports = {
+export default {
   listar,
   inserir,
   buscarPorId,
